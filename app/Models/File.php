@@ -12,9 +12,12 @@ class File extends Model
 
     protected $fillable = ['file_name', 'file_type', 'file_path', 'file_original_path', 'id_user_file'];
 
-
-    protected static function booted() {
-        static::created(function($file){
+    protected $casts = [
+        'file_type' => FileType::class
+    ];
+    protected static function booted()
+    {
+        static::created(function ($file) {
 
             AuditFile::create([
                 'id_file' => $file->id,
@@ -25,7 +28,7 @@ class File extends Model
                 'id_user_log' => 1
             ]);
         });
-        static::updated(function($file){
+        static::updated(function ($file) {
 
             AuditFile::create([
                 'id_file' => $file->id,
@@ -36,7 +39,7 @@ class File extends Model
                 'id_user_log' => 1
             ]);
         });
-        static::deleted(function($file){
+        static::deleted(function ($file) {
             AuditFile::create([
                 'id_file' => $file->id,
                 'audit_action' => 'deleted',

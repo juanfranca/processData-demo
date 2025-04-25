@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\FileType;
 use App\Http\Resources\FileResource;
 use App\Models\File;
 use App\Models\FileRegister;
@@ -47,6 +48,10 @@ class FileService
 
       return $this->successResponse('File created successfully!', $createdFile);
     } catch (Exception $e) {
+
+      if (isset($newFile['file_path']) && Storage::disk('local')->exists($newFile['file_path'])) {
+        $this->deleteFile($newFile['file_path']);
+    }
       return $this->errorResponse($e->getMessage());
     }
   }
@@ -76,6 +81,9 @@ class FileService
       $json = $this->getJson($file->file_path);
 
       $this->processJson($json);
+
+      $file->update(['file_type' => FileType::PROCESSED->value]); 
+      
       return $this->successResponse('The records were inserted into the database.');
     } catch (Exception $e) {
       return $this->errorResponse($e->getMessage(), 500);
@@ -127,7 +135,6 @@ class FileService
     $data = [];
     for ($ii = 0; $ii < $totalDados; $ii++) {
       
-      // $jsonFormated = $this->formatJson($jsonRegister[$ii]);
       $data[] = $jsonRegister[$ii];
 
       if ($ii != 0 && $ii % $chunkSize === 0) {
@@ -139,8 +146,5 @@ class FileService
     if (!empty($data)) {
       yield $data;
     }
-  }
-  private function formatJson($json) {
-    return [];
   }
 }
