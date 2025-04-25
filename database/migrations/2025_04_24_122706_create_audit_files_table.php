@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('audit_files', function (Blueprint $table) {
             $table->id();
+            $table->string('audit_action');
             $table->integer('id_file');
-            $table->string('file_name');
-            $table->enum('file_type', [1,2,3]);
-            $table->string('file_path');
+            $table->string('audit_file_name');
+            $table->tinyInteger('audit_file_type');
+            $table->string('audit_file_path');
             $table->timestamps();
+            
 
             $table->foreignId('id_user_log')->constrained('users', 'id');
         });

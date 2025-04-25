@@ -4,39 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FileRequest;
 use App\Services\FileService;
+use Illuminate\Http\JsonResponse;
+
 
 
 class FileController extends Controller
 {
-    public function __construct(protected FileService $fileService = new FileService)
-    {
-    }
+    public function __construct(protected FileService $fileService) {}
 
-    public function index()
+    public function index(): JsonResponse
     {
         return $this->fileService->index();
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
-
+        return $this->fileService->show($id);
     }
 
-    public function create(FileRequest $request)
+    public function create(FileRequest $request): JsonResponse
     {
+        return $this->fileService->create($request);
     }
 
-    public function update(FileRequest $request, $id)
+    public function delete($id): JsonResponse
     {
-
+        return $this->fileService->delete($id);
     }
 
-    public function delete($id)
+    public function processFile($id): JsonResponse
     {
-    }
-
-    public function processFile()
-    {
-
+        return $this->fileService->processFile($id);
     }
 }

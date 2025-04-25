@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\FileController;
+use App\Services\FileService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(FileController::class, function ($app) {
+            return new FileController($app->make(FileService::class));
+        });
     }
 
     /**

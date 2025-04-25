@@ -14,6 +14,14 @@ class FileResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'file_name' => $this->file_name,
+            'file_type' => $this->file_type,
+            'id_user' => $this->id_user_file,
+            'user' => $this->user->name,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
     }
 }
